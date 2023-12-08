@@ -12,7 +12,7 @@ def ingest_map_str(map_str, dest_map):
     range_lists = [s.split(' ') for s in map_str.strip().split('\n')[1:]]
     for range_list in range_lists:
         dest, src, r_len = [int(x) for x in range_list]
-        dest_map[(dest, dest + r_len)] = src
+        dest_map[(src, src + r_len)] = dest
 
 def get_src_from_dest(dest, dest_map):
     print(f'USING MAP {maps.index(dest_map)}')
@@ -21,7 +21,7 @@ def get_src_from_dest(dest, dest_map):
             print(f'{dest} NOT in ({start}, {end})') 
             continue 
         print(f'{dest} IN ({start}, {end})') 
-        return dest_map[(start, end)]
+        return dest_map[(start, end)] + dest - start 
     print(f'DEFAULT {dest}') 
     return dest
 
@@ -35,8 +35,14 @@ with open('5-input.txt', 'r') as f:
 
 seeds = [int(s) for s in seeds]
 
+for key in seed_to_soil.keys(): 
+    print(f'{key} : {seed_to_soil[key]}')
+
 for i in range(len(seeds)):
     for m in maps:
+        print(f'MAP {maps.index(m)}')
+        for key in m.keys():
+            print(f'{key}: {m[key]}')
         seeds[i] = get_src_from_dest(seeds[i], m)
 
 print(f'PART 1: {min(seeds)}')
